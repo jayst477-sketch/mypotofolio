@@ -36,3 +36,6 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Render menggunakan port dinamis, sesuaikan konfigurasi port Apache
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+
+# Jalankan migrasi database otomatis saat container dibagun
+RUN php artisan migrate --force || true
