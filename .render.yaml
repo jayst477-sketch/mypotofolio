@@ -1,11 +1,5 @@
 services:
   - type: web
     name: mypotofolio
-    env: php
+    env: docker
     plan: free
-    buildCommand: "composer install --no-dev --optimize-autoloader"
-    staticPublishPath: public
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.php
