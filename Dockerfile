@@ -22,9 +22,11 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Salin semua file project ke dalam container
 COPY . /var/www/html
 
-# Set permissions untuk storage dan bootstrap cache agar bisa ditulis
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Buat file database SQLite jika belum ada dan atur izin folder sepenuhnya
+RUN mkdir -p /var/www/html/database \
+    && touch /var/www/html/database/database.sqlite \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -34,6 +36,3 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Render menggunakan port dinamis, sesuaikan konfigurasi port Apache
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
-
-# Generate key dan clear cache saat container siap
-RUN php artisan key:generate --force || true
