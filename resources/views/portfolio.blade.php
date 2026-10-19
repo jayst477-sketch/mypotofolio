@@ -31,23 +31,61 @@
 </head>
 <body class="bg-darkBg text-white selection:bg-neonGreen selection:text-black">
 
-    <!-- NAVBAR -->
-    <header class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-        <div class="text-2xl font-black tracking-wider flex items-center gap-2">
-            <span>YUSUP<span class="text-neonGreen">.</span></span>
-            <span class="text-xs bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">Laravel 13</span>
-        </div>
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
-            <a href="#beranda" class="text-neonGreen hover:text-neonGreen transition">Beranda</a>
-            <a href="#proyek" class="hover:text-neonGreen transition">Proyek</a>
-            <a href="#keahlian" class="hover:text-neonGreen transition">Keahlian</a>
-            <a href="#tentang" class="hover:text-neonGreen transition">Tentang</a>
-            <a href="#kontak" class="hover:text-neonGreen transition">Kontak</a>
-        </nav>
-        <button class="bg-purple-600 hover:bg-purple-700 text-white p-2.5 rounded-xl md:hidden">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </header>
+   <!-- NAVBAR -->
+<header class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-50">
+    <div class="text-2xl font-black tracking-wider flex items-center gap-2">
+        <span>YUSUP<span class="text-neonGreen">.</span></span>
+        <span class="text-xs bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
+            Laravel 13
+        </span>
+    </div>
+
+    <!-- Menu Desktop -->
+    <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+        <a href="#beranda" class="hover:text-neonGreen">Beranda</a>
+        <a href="#proyek" class="hover:text-neonGreen">Proyek</a>
+        <a href="#keahlian" class="hover:text-neonGreen">Keahlian</a>
+        <a href="#tentang" class="hover:text-neonGreen">Tentang</a>
+        <a href="#kontak" class="hover:text-neonGreen">Kontak</a>
+    </nav>
+
+    <!-- Tombol Menu HP -->
+    <button
+        id="mobile-menu-button"
+        type="button"
+        class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-xl md:hidden items-center justify-center"
+        style="min-width:44px; min-height:44px; touch-action:manipulation;"
+        aria-label="Buka menu navigasi"
+        aria-controls="mobile-menu"
+        aria-expanded="false">
+
+        <i id="mobile-menu-icon" class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Navigasi HP -->
+    <nav
+        id="mobile-menu"
+        class="hidden absolute top-full left-6 right-6 mt-2 rounded-2xl border border-gray-800 bg-cardDark p-3 shadow-xl md:hidden"
+        style="z-index:9999;"
+        aria-label="Navigasi HP">
+
+        <a href="#beranda" class="block rounded-lg px-4 py-3 text-neonGreen hover:bg-gray-800">
+            Beranda
+        </a>
+        <a href="#proyek" class="block rounded-lg px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-neonGreen">
+            Proyek
+        </a>
+        <a href="#keahlian" class="block rounded-lg px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-neonGreen">
+            Keahlian
+        </a>
+        <a href="#tentang" class="block rounded-lg px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-neonGreen">
+            Tentang
+        </a>
+        <a href="#kontak" class="block rounded-lg px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-neonGreen">
+            Kontak
+        </a>
+    </nav>
+</header>
 
     <!-- HERO SECTION -->
     <section id="beranda" class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative">
@@ -234,5 +272,59 @@
             © 2026 Yusup • Portofolio PPLG dengan Laravel 13.
         </div>
     </footer>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    if (!button || !menu || !icon) return;
+
+    function closeMenu() {
+        menu.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-label', 'Buka menu navigasi');
+
+        icon.classList.remove('fa-xmark');
+        icon.classList.add('fa-bars');
+    }
+
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const isOpen = !menu.classList.contains('hidden');
+
+        if (isOpen) {
+            closeMenu();
+        } else {
+            menu.classList.remove('hidden');
+            button.setAttribute('aria-expanded', 'true');
+            button.setAttribute('aria-label', 'Tutup menu navigasi');
+
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        }
+    });
+
+    menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!menu.contains(event.target) && !button.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeMenu();
+    });
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 768) closeMenu();
+    });
+});
+</script>
 </body>
 </html>
